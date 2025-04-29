@@ -24,12 +24,11 @@ def get_session_id():
         raise ValueError("No se pudo obtener session_id.")
     return session_id
 
-@app.route("/sale_order_line")
-def get_sale_order_line():
+@app.route("/sale_order_line_historico")
+def get_sale_order_line_historico():
     try:
         offset = int(request.args.get("offset", 0))
-        limit = int(request.args.get("limit", 100))
-
+        limit = int(request.args.get("limit", 500))
         session_id = get_session_id()
         headers = {"Content-Type": "application/json", "Cookie": f"session_id={session_id}"}
 
@@ -39,14 +38,15 @@ def get_sale_order_line():
             "params": {
                 "model": "sale.order.line",
                 "method": "search_read",
-                "args": [[]],
+                "args": [[["create_date", "<=", "2025-04-27"]]],
                 "kwargs": {
-                    "offset": offset,
-                    "limit": limit,
                     "fields": [
-                        "order_id", "invoice_status", "price_unit", "price_subtotal",
-                        "price_tax", "price_total", "product_id", "order_partner_id", "id"
-                    ]
+                        "name", "price_unit", "price_subtotal", "price_total", "price_reduce",
+                        "price_reduce_taxinc", "discount", "product_uom_qty",
+                        "qty_to_invoice", "qty_invoiced", "id"
+                    ],
+                    "offset": offset,
+                    "limit": limit
                 }
             }
         }
