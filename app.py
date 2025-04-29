@@ -24,8 +24,8 @@ def get_session_id():
         raise ValueError("No se pudo obtener session_id.")
     return session_id
 
-@app.route("/sale_order_line_historico")
-def get_sale_order_line_historico():
+@app.route("/sale_order_line_historico_ampliado")
+def get_sale_order_line_historico_ampliado():
     try:
         offset = int(request.args.get("offset", 0))
         limit = int(request.args.get("limit", 500))
@@ -43,7 +43,8 @@ def get_sale_order_line_historico():
                     "fields": [
                         "name", "price_unit", "price_subtotal", "price_total", "price_reduce",
                         "price_reduce_taxinc", "discount", "product_uom_qty",
-                        "qty_to_invoice", "qty_invoiced", "id"
+                        "qty_to_invoice", "qty_invoiced", "id",
+                        "order_id", "invoice_status", "product_id", "order_partner_id"
                     ],
                     "offset": offset,
                     "limit": limit
